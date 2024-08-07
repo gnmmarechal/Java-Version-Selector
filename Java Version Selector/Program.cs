@@ -12,14 +12,29 @@ Dictionary<string, string> javaVersionPaths = System.Text.Json.JsonSerializer.De
 
 //File.WriteAllText(fileName, System.Text.Json.JsonSerializer.Serialize(javaVersionPaths));
 
+if (javaVersionPaths.Count == 0)
+{
+    Console.WriteLine("No JREs found!");
+    Console.ReadKey();
+    Environment.Exit(0);
+}
+
 if (args.Length > 0)
 {
     string key = javaVersionPaths.Keys.First();
-    Console.Write("> ");
-    string input = Console.ReadLine() ?? key;
-    if (javaVersionPaths.ContainsKey(input))
+    if (javaVersionPaths.Keys.Count > 1 )
     {
-        key = input;
+        Console.WriteLine("Versions: ");
+        foreach (string key2 in javaVersionPaths.Keys)
+        {
+            Console.WriteLine($" - {key2} : {javaVersionPaths[key2]}");
+        }
+        Console.Write("> ");
+        string input = Console.ReadLine() ?? key;
+        if (javaVersionPaths.ContainsKey(input))
+        {
+            key = input;
+        }
     }
     string jarPath = args[0];
     string command = $"\"{javaVersionPaths[key]}\" -jar \"{jarPath}\"";
